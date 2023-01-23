@@ -1,0 +1,50 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+User -> Server: GET /
+Server -> User: redirect to /YYYYMM
+
+User -> Server: GET /YYYYMM
+Server -> Pages: load page [yyyymm]
+Pages -> YYYYMM: render
+YYYYMM -> DB: findMany with timeline data
+DB -> YYYYMM: timeline data
+
+alt isCurrentMonth === true
+    YYYYMM -> Timeline: select today
+    YYYYMM -> DB: findUnique with date data
+    DB -> YYYYMM: todays entry
+    YYYYMM -> DiaryEntry: show textarea with todays entry
+    User -> YYYYMM: edits text
+    YYYYMM -> API: POST /api/today
+else isCurrentMonth === false
+    YYYYMM -> Timeline: select nothing
+    YYYYMM -> DiaryEntry: show empty text
+end
+
+YYYYMM -> User: show page
+@enduml
+
+@startuml
+'https://plantuml.com/sequence-diagram
+User -> Server: GET /YYYYMMDD
+Server -> Pages: load page [yyyymmdd]
+Pages -> YYYYMMDD: render
+YYYYMMDD -> API: GET /api/YYYYMM
+API -> YYYYMMDD: timeline data
+
+YYYYMMDD -> Timeline: select YYYYMMDD
+YYYYMMDD -> API: GET /api/YYYYMMDD
+API -> YYYYMMDD: date entry
+
+alt isToday === true
+    YYYYMMDD -> DiaryEntry: show textarea
+else isToday === false
+    alt isFuture === true
+        YYYYMMDD -> DiaryEntry: show 404
+    end
+    YYYYMMDD -> DiaryEntry: show just text of date entry
+end
+
+YYYYMMDD -> User: show page
+@enduml

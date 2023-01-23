@@ -1,15 +1,9 @@
 import type {NextApiRequest, NextApiResponse} from 'next'
-import {Temporal, Intl, toTemporalInstant} from '@js-temporal/polyfill';
+import {Temporal} from '@js-temporal/polyfill';
 import {PrismaClient} from '@prisma/client'
+import {Diary} from "@/types";
 
 const prisma = new PrismaClient()
-
-type Diary = {
-	uuid: string;
-	date: Date;
-	text: string;
-	word_count: number;
-}
 
 export default async function handler(
 	req: NextApiRequest,
