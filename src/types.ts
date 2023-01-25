@@ -8,11 +8,11 @@ export type Diary = {
 }
 
 export type DayData = {
-	date: number;
+	day: number;
 	word_count: number;
 }
 
 export type TimelineProps = {
 	timeline: DayData[],
-	month: Temporal.PlainYearMonth;
+	month: string; // 2023-01
 }

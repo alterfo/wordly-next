@@ -42,3 +42,6 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 > $ npx prisma generate
 
 > $ npx prisma migrate dev
+ 
+## Conventions
+yyyymm variable contains yyyy-mm format year-month.

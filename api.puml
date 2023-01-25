@@ -4,6 +4,11 @@
 User -> Server: GET /
 Server -> User: redirect to /YYYYMM
 
+@enduml
+
+@startuml
+'https://plantuml.com/sequence-diagram
+
 User -> Server: GET /YYYYMM
 Server -> Pages: load page [yyyymm]
 Pages -> YYYYMM: render

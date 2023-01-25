@@ -15,5 +15,18 @@ module.exports = {
                 permanent: true
             }
         ]
-    }
+    },
+    async headers() {
+        return [
+            {
+                source: '/',
+                headers: [
+                    {
+                        key: 'x-timezone',
+                        value: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                    },
+                ],
+            },
+        ]
+    },
 }
