@@ -10,7 +10,7 @@ export default function RootLayout({
   children: ReactNode
 }) {
   return (
-    <html lang="en" className={inter.className}>
+    <html lang="en" className={inter.className + "bg-gray-900 bg-[url(/bg/body-bg.png)] bg-repeat"}>
       <head />
       <body>{children}</body>
     </html>

@@ -21,7 +21,7 @@ function fillTimelineArray(	yearMonth: Temporal.PlainYearMonth,
 	}
 
 	if (isCurrentMonth) {
-		for (let i = todayDayNumber; i < yearMonth.daysInMonth; i++) {
+		for (let i = todayDayNumber + 1; i < yearMonth.daysInMonth; i++) {
 			timeline[i].word_count = -1;
 		}
 	}

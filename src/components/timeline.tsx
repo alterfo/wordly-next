@@ -1,5 +1,5 @@
+'use client'
 import {TimelineProps} from "@/types";
-import {Temporal} from "@js-temporal/polyfill";
 import '../app/globals.css';
 
 export default function Timeline({timeline, month}: TimelineProps) {
@@ -9,12 +9,12 @@ export default function Timeline({timeline, month}: TimelineProps) {
 
 	return (
 		<>
-			<h2 className="text-3xl font-bold">{month}</h2>
+			<h2 className="text-3xl font-bold text-blue-50 mt-10">{month}</h2>
 
-			<div className="flex flex-row flex-nowrap">
+			<div className="flex flex-row flex-nowrap mb-10">
 				<button className="flex flex-initial">{"<<"}</button>
 
-				<div className="flex flex-row flex-wrap overflow-hidden w-full mx-[10px] justify-center bg">
+				<div className="flex flex-row flex-wrap overflow-hidden w-full mx-[10px]">
 					{timeline.length && timeline.map(({day, word_count}) => {
 						return (
 							<div className="my-1.5 mx-0.5 cursor-pointer flex flex-column flex-wrap w-5" key={day}>
