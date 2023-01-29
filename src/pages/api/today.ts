@@ -23,12 +23,12 @@ export default async function handler(
 		create: {
 			date: new Date(date.toString()),
 			text: req.body.text,
-			word_count: req.body.text.word_count,
+			word_count: req.body.word_count,
 		},
 		update: {
 			text: req.body.text,
-			word_count: req.body.text.word_count,
+			word_count: req.body.word_count,
 		}
 	})
-	res.status(200)
+	res.status(200).json({message: "Ok"})
 }
