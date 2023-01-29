@@ -1,9 +1,17 @@
 "use client"
 import '../app/globals.css';
-import {useState} from "react";
+import {useEffect, useState} from "react";
+import {Temporal} from "@js-temporal/polyfill";
 
-export default function DiaryEntry({setTimelineWordcount}: {setTimelineWordcount: (wc: number) => void}) {
-	const [text, setText] = useState('')
+export default function DiaryEntry({
+									   setTimelineWordcount,
+									   initialText
+	}: {
+		setTimelineWordcount: (wc: number) => void,
+		initialText: string
+	}) {
+
+	const [text, setText] = useState(initialText)
 	const [isSaved, setIsSaved] = useState(true)
 	const [saving, setSaving] = useState(false)
 
@@ -21,14 +29,39 @@ export default function DiaryEntry({setTimelineWordcount}: {setTimelineWordcount
 		setTimelineWordcount(getWordsCount())
 	}
 
+	async function onSave(e: React.KeyboardEvent) {
+		if (e.key === 's' && e.ctrlKey) {
+			e.preventDefault()
+			e.stopPropagation()
+
+			setSaving(true)
+			await fetch('/api/today', {
+				method: "POST",
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					text: text,
+					date: Temporal.Now.zonedDateTimeISO().toPlainDate().toString(),
+					word_count: getWordsCount()
+				})
+			}).then(() => {
+				setIsSaved(true)
+			}).finally(() => {
+				setSaving(false)
+			})
+			return false
+		}
+	}
+
 	return (
 		<>
+			<h2 className="text-blue-50 text-3xl self-start w-full">Автор, жги!</h2>
+
 			{saving &&
-				<img alt="loading" width="16" height="16" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="/>
+                <img alt="loading" width="16" height="16" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="/>
 			}
 			{isSaved && <span>Сохранено</span>}
-
-			<h2 className="text-blue-50 text-3xl self-start w-full">Автор, жги!</h2>
 			{!isSaved && <span className="text-red-100">Изменено, но пока не сохранено</span>}
 			<textarea
 				className="overflow-hidden w-full text-gray-800 mt-5
@@ -41,6 +74,14 @@ export default function DiaryEntry({setTimelineWordcount}: {setTimelineWordcount
 				cols={30}
 				rows={10}
 				name="entry"
+				autoFocus={true}
+				onKeyDown={onSave}
+				onKeyUp={(e) => {
+					if (e.key === 's' && e.ctrlKey) {
+						e.preventDefault()
+						e.stopPropagation()
+					}
+				}}
 			/>
 		</>
 	)

@@ -60,3 +60,17 @@ export async function getTimelineData(yyyymm: string): Promise<DayData[]> {
 	return fillTimelineArray(date, timelineData)
 }
 
+export async function getInitialText(yyyymmdd: string): Promise<string> {
+	const date: Temporal.PlainDate = Temporal.PlainDate.from(yyyymmdd)
+
+	const text = await prisma.diaries.findUnique({
+		where: {
+			date: new Date(date.toString())
+		},
+		select: {
+			text: true,
+		}
+	})
+
+	return text?.text || ''
+}

@@ -5,8 +5,8 @@ import DiaryEntry from "@/components/diary-entry";
 import {DayData} from "@/types";
 import {useState} from "react";
 
-export default function EditableEntry({timeline, monthStringCapitalized}:
-{ timeline: DayData[]; monthStringCapitalized: string }) {
+export default function EditableEntry({timeline, monthStringCapitalized, initialText}:
+{ timeline: DayData[]; monthStringCapitalized: string, initialText: string }) {
 	const [tl, setTl] = useState(timeline)
 
 	function setTimelineWordcount(word_count: number) {
@@ -21,7 +21,7 @@ export default function EditableEntry({timeline, monthStringCapitalized}:
 	return <>
 		<div className="flex flex-col items-center w-full px-10 max-w-screen-xl">
 			<Timeline timeline={tl} month={monthStringCapitalized}/>
-			<DiaryEntry setTimelineWordcount={setTimelineWordcount}/>
+			<DiaryEntry setTimelineWordcount={setTimelineWordcount} initialText={initialText}/>
 		</div>
 	</>
 }
