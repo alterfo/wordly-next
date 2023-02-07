@@ -1,4 +1,4 @@
-import {getInitialText, getTimelineData} from "@/api";
+import {getTextByDate, getTimelineData} from "@/api";
 import {getMonthStringCapitalized} from "@/date";
 import EditableEntry from "@/components/editable-entry";
 import {Temporal} from "@js-temporal/polyfill";
@@ -8,9 +8,13 @@ export default async function MonthView({searchParams: {yyyymm}}: { searchParams
 
 	const monthStringCapitalized = getMonthStringCapitalized(yyyymm)
 
-	const initialText = await getInitialText(Temporal.Now.plainDateISO().toString())
+	const initialText = await getTextByDate(Temporal.Now.plainDateISO().toString())
 
 	return <>
-		<EditableEntry timeline={timeline} monthStringCapitalized={monthStringCapitalized} initialText={initialText} />
+		<EditableEntry
+			timeline={timeline}
+			monthStringCapitalized={monthStringCapitalized}
+			initialText={initialText}
+		/>
 	</>
 }

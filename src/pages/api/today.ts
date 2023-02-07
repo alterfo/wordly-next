@@ -1,10 +1,7 @@
 import type {NextApiRequest, NextApiResponse} from 'next'
 import {Temporal} from '@js-temporal/polyfill';
-import {PrismaClient} from '@prisma/client'
 import {Diary} from "@/types";
-import {create} from "domain";
-
-const prisma = new PrismaClient()
+import prisma from "@/prisma";
 
 export default async function handler(
 	req: NextApiRequest,
@@ -12,10 +9,11 @@ export default async function handler(
 ) {
 	const date = Temporal.Now.plainDateISO();
 	if (req.body.date !== date.toString()) {
-		res.status(422).json({
+		return res.status(422).json({
 			message: 'День закончился, перезагрузите страницу'
 		})
 	}
+
 	await prisma.diaries.upsert({
 		where: {
 			date: new Date(date.toString())
@@ -30,5 +28,5 @@ export default async function handler(
 			word_count: req.body.word_count,
 		}
 	})
-	res.status(200).json({message: "Ok"})
+	return res.status(200).json({message: "Ok"})
 }

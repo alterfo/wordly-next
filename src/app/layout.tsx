@@ -12,7 +12,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={inter.className + "bg-gray-900 bg-[url(/bg/body-bg.png)] bg-repeat"}>
       <head />
-      <body>{children}</body>
+      <body className="grid grid-cols-1 mx-4">{children}</body>
     </html>
   )
 }

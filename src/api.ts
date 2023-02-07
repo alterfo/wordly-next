@@ -2,7 +2,7 @@ import {Temporal} from "@js-temporal/polyfill";
 import {DayData} from "@/types";
 import prisma from "@/prisma";
 
-function inCurrentMonth(yearMonth: Temporal.PlainYearMonth) {
+export function inCurrentMonth(yearMonth: Temporal.PlainYearMonth) {
 	return yearMonth.equals(Temporal.Now.plainDateISO().toPlainYearMonth());
 }
 
@@ -11,7 +11,7 @@ function fillTimelineArray(	yearMonth: Temporal.PlainYearMonth,
 
 	const timeline: DayData[] = []
 	const isCurrentMonth = inCurrentMonth(yearMonth)
-	const todayDayNumber = Temporal.Now.plainDateISO().day
+	const todayDayNumber = Temporal.Now.plainDateISO().day - 1
 
 	for (let i = 0; i < yearMonth.daysInMonth; i++) {
 		timeline[i] = {
@@ -21,7 +21,7 @@ function fillTimelineArray(	yearMonth: Temporal.PlainYearMonth,
 	}
 
 	if (isCurrentMonth) {
-		for (let i = todayDayNumber + 1; i < yearMonth.daysInMonth; i++) {
+		for (let i = todayDayNumber; i < yearMonth.daysInMonth; i++) {
 			timeline[i].word_count = -1;
 		}
 	}
@@ -31,13 +31,12 @@ function fillTimelineArray(	yearMonth: Temporal.PlainYearMonth,
 			.toZonedDateTimeISO(Intl.DateTimeFormat().resolvedOptions().timeZone)
 			.toPlainDate()
 			.getISOFields()
-			.isoDay
+			.isoDay - 1
 		timeline[timeline.findIndex((tlDay) => (tlDay.day === day))] = {
 			day,
 			word_count
 		};
 	});
-
 	return timeline;
 }
 
@@ -60,7 +59,7 @@ export async function getTimelineData(yyyymm: string): Promise<DayData[]> {
 	return fillTimelineArray(date, timelineData)
 }
 
-export async function getInitialText(yyyymmdd: string): Promise<string> {
+export async function getTextByDate(yyyymmdd: string): Promise<string> {
 	const date: Temporal.PlainDate = Temporal.PlainDate.from(yyyymmdd)
 
 	const text = await prisma.diaries.findUnique({

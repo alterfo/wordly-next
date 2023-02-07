@@ -3,10 +3,10 @@ import '../app/globals.css';
 import {useEffect, useLayoutEffect, useRef, useState} from "react";
 import {Temporal} from "@js-temporal/polyfill";
 
-export default function DiaryEntry({
-									   setTimelineWordcount,
-									   initialText
-								   }: {
+export default function Textarea({
+	setTimelineWordcount,
+	initialText
+}: {
 	setTimelineWordcount: (wc: number) => void,
 	initialText: string
 }) {
@@ -41,7 +41,6 @@ export default function DiaryEntry({
 
 	useEffect(() => {
 		setTimelineWordcount(getWordsCount())
-		// setRows(Math.max(text.split("\n").length + 1, 10))
 	}, [text])
 
 	function onChangeText(e: React.FormEvent<HTMLTextAreaElement>) {

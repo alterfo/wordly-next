@@ -9,9 +9,9 @@ export function middleware(request: NextRequest) {
 		return NextResponse.rewrite(nextURL)
 	}
 
-	if (request.nextUrl.pathname.startsWith('/^\/\d\d\d\d-\d\d-\d\d$/')) {
-		const nextURL = new URL('/yyyy-mm-dd', request.url)
-		nextURL.searchParams.set('date', request.nextUrl.pathname.substring(1))
+	if (request.nextUrl.pathname.match(/^\/\d\d\d\d-\d\d\/\d\d$/)) {
+		const nextURL = new URL('/yyyy-mm/dd', request.url)
+		nextURL.searchParams.set('yyyymmdd', request.nextUrl.pathname.substring(1).replace('/', '-')) // 2023-02-07
 		return NextResponse.rewrite(nextURL)
 	}
 }
