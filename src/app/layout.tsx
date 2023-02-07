@@ -1,8 +1,11 @@
 import './globals.css'
 import {ReactNode} from "react";
-import { Inter } from '@next/font/google';
+import { Caveat } from '@next/font/google';
 
-const inter = Inter({ subsets: ['latin'] });
+const font = Caveat({
+    subsets: ['latin', 'cyrillic'],
+    variable: '--font-caveat',
+});
 
 export default function RootLayout({
   children,
@@ -10,7 +13,7 @@ export default function RootLayout({
   children: ReactNode
 }) {
   return (
-    <html lang="en" className={inter.className + "bg-gray-900 bg-[url(/bg/body-bg.png)] bg-repeat"}>
+    <html lang="en" className={font.variable + " bg-gray-900 bg-[url(/bg/body-bg.png)] bg-repeat"}>
       <head />
       <body className="grid grid-cols-1 mx-4">{children}</body>
     </html>

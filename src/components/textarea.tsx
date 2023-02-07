@@ -1,6 +1,6 @@
 "use client"
 import '../app/globals.css';
-import {useEffect, useLayoutEffect, useRef, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {Temporal} from "@js-temporal/polyfill";
 
 export default function Textarea({
