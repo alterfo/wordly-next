@@ -1,16 +1,20 @@
 "use client"
 import '../app/globals.css';
-import {useEffect, useRef, useState} from "react";
+import {useContext, useEffect, useRef, useState} from "react";
 import {Temporal} from "@js-temporal/polyfill";
+import {DayContext} from "@/day-context";
+import PlainDate = Temporal.PlainDate;
 
 export default function Textarea({
-	setTimelineWordcount,
-	initialText
+	initialText,
+	yyyymmdd
 }: {
-	setTimelineWordcount: (wc: number) => void,
-	initialText: string
+	initialText: string,
+	yyyymmdd: string
 }) {
 	const textAreaRef = useRef<HTMLTextAreaElement>(null)
+
+	const {setWc} = useContext(DayContext)
 
 	const [text, setText] = useState(initialText)
 	const [isSaved, setIsSaved] = useState(true)
@@ -40,7 +44,7 @@ export default function Textarea({
 	}, [text]);
 
 	useEffect(() => {
-		setTimelineWordcount(getWordsCount())
+		setWc(getWordsCount())
 	}, [text])
 
 	function onChangeText(e: React.FormEvent<HTMLTextAreaElement>) {
@@ -57,7 +61,7 @@ export default function Textarea({
 			},
 			body: JSON.stringify({
 				text: text,
-				date: Temporal.Now.zonedDateTimeISO().toPlainDate().toString(),
+				date: yyyymmdd,
 				word_count: getWordsCount()
 			})
 		}).then(() => {

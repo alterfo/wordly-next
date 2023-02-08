@@ -6,6 +6,10 @@ export function inCurrentMonth(yearMonth: Temporal.PlainYearMonth) {
 	return yearMonth.equals(Temporal.Now.plainDateISO().toPlainYearMonth());
 }
 
+export function isToday(yyyymmdd: Temporal.PlainDate) {
+	return yyyymmdd.equals(Temporal.Now.plainDateISO().toString());
+}
+
 function fillTimelineArray(	yearMonth: Temporal.PlainYearMonth,
 							timelineData: { date: Date; word_count: number; }[]): DayData[] {
 
@@ -32,22 +36,22 @@ function fillTimelineArray(	yearMonth: Temporal.PlainYearMonth,
 			.toPlainDate()
 			.getISOFields()
 			.isoDay - 1
+
 		timeline[timeline.findIndex((tlDay) => (tlDay.day === day))] = {
 			day,
-			word_count
+			word_count,
+			is_today: todayDayNumber === day
 		};
 	});
 	return timeline;
 }
 
-export async function getTimelineData(yyyymm: string): Promise<DayData[]> {
-	const date: Temporal.PlainYearMonth = Temporal.PlainYearMonth.from(yyyymm)
-
+export async function getTimelineData(yyyymm: Temporal.PlainYearMonth): Promise<DayData[]> {
 	const timelineData = await prisma.diaries.findMany({
 		where: {
 			date: {
-				gte: new Date(date.toPlainDate({day: 1}).toString()),
-				lte: new Date(date.toPlainDate({day: date.daysInMonth}).toString()),
+				gte: new Date(yyyymm.toPlainDate({day: 1}).toString()),
+				lte: new Date(yyyymm.toPlainDate({day: yyyymm.daysInMonth}).toString()),
 			}
 		},
 		select: {
@@ -56,15 +60,13 @@ export async function getTimelineData(yyyymm: string): Promise<DayData[]> {
 		}
 	})
 
-	return fillTimelineArray(date, timelineData)
+	return fillTimelineArray(yyyymm, timelineData)
 }
 
-export async function getTextByDate(yyyymmdd: string): Promise<string> {
-	const date: Temporal.PlainDate = Temporal.PlainDate.from(yyyymmdd)
-
+export async function getTextByDate(yyyymmdd: Temporal.PlainDate): Promise<string> {
 	const text = await prisma.diaries.findUnique({
 		where: {
-			date: new Date(date.toString())
+			date: new Date(yyyymmdd.toString())
 		},
 		select: {
 			text: true,

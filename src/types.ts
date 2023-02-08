@@ -1,4 +1,5 @@
 import {Temporal} from "@js-temporal/polyfill";
+import PlainYearMonth = Temporal.PlainYearMonth;
 
 export type Diary = {
 	uuid: string;
@@ -10,9 +11,11 @@ export type Diary = {
 export type DayData = {
 	day: number;
 	word_count: number;
+	is_today?: boolean;
 }
 
 export type TimelineProps = {
 	timeline: DayData[],
-	month: string; // 2023-01
+	monthStringCapitalized: string; // Февраль 2023
+	yyyymm: PlainYearMonth;
 }

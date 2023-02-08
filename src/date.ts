@@ -1,7 +1,7 @@
 import {Temporal} from "@js-temporal/polyfill";
 
-export function getMonthStringCapitalized(yyyymm: string): string {
-	const monthString = Temporal.PlainYearMonth.from(yyyymm) // e.g. Январь
+export function getMonthStringCapitalized(yyyymm: Temporal.PlainYearMonth): string {
+	const monthString = yyyymm // e.g. Январь
 		.toLocaleString('ru-RU', {
 			month: 'long',
 			year: 'numeric',
@@ -13,6 +13,6 @@ export function getMonthStringCapitalized(yyyymm: string): string {
 	return monthStringCapitalized
 }
 
-export function getMonthOfDay(yyyymmdd: string): string {
-	return yyyymmdd.substring(0, 7)
+export function getMonthOfDay(yyyymmdd: Temporal.PlainDate): Temporal.PlainYearMonth {
+	return yyyymmdd.toPlainYearMonth()
 }

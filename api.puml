@@ -2,32 +2,8 @@
 'https://plantuml.com/sequence-diagram
 
 User -> Server: GET /
-Server -> User: redirect to /YYYYMM
+Server -> User: redirect to /yyyy-mm-dd
 
-@enduml
-
-@startuml
-'https://plantuml.com/sequence-diagram
-
-User -> Server: GET /YYYYMM
-Server -> Pages: load page [yyyymm]
-Pages -> YYYYMM: render
-YYYYMM -> DB: findMany with timeline data
-DB -> YYYYMM: timeline data
-
-alt isCurrentMonth === true
-    YYYYMM -> Timeline: select today
-    YYYYMM -> DB: findUnique with date data
-    DB -> YYYYMM: todays entry
-    YYYYMM -> DiaryEntry: show textarea with todays entry
-    User -> YYYYMM: edits text
-    YYYYMM -> API: POST /api/today
-else isCurrentMonth === false
-    YYYYMM -> Timeline: select nothing
-    YYYYMM -> DiaryEntry: show empty text
-end
-
-YYYYMM -> User: show page
 @enduml
 
 @startuml
@@ -53,21 +29,3 @@ end
 
 YYYYMMDD -> User: show page
 @enduml
-
-@startsalt
-title Февраль 2023
-
-{
-{1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 | 27 | 28 | 29
-[0] | [0] | [19] | [100] | [500] | [1000] | [10000] | [0] | [0] | [0] | [0] | [0] | [0] | [0] | [0] | [0] | [0] | [0] | [0] | [0] | [0] | [0] | [0] | [0] | [0] | [0] | [0] | [0] | [0]
-}
-
-Автор жги!
-
-   This is a long
-   text in a textarea
-   .
-   "                         "
-
-}
-@endsalt
