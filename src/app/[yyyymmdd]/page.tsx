@@ -5,19 +5,24 @@ import {Temporal} from "@js-temporal/polyfill";
 import EditableEntry from "@/components/editable-entry";
 import PlainYearMonth = Temporal.PlainYearMonth;
 import prisma from "@/prisma";
+import {headers} from "next/headers";
 
 export default async function DayView({params: {yyyymmdd}}: {params: { yyyymmdd: string }}) {
+	const date = Temporal.PlainDate.from(yyyymmdd)
+
+	const is_today = isToday(date)
+
+	is_today && headers() // to prevent SSG
+
 	const yearMonth = PlainYearMonth.from(yyyymmdd)
 
 	const timeline = await getTimelineData(yearMonth)
 
 	const monthStringCapitalized = getMonthStringCapitalized(yearMonth)
 
-	const date = Temporal.PlainDate.from(yyyymmdd)
 
 	const text = await getTextByDate(date)
 
-	const is_today = isToday(date)
 
 	return <>
 		<Timeline timeline={timeline} monthStringCapitalized={monthStringCapitalized} yyyymm={yearMonth}/>
@@ -32,12 +37,12 @@ export default async function DayView({params: {yyyymmdd}}: {params: { yyyymmdd:
 
 export async function generateStaticParams() {
 	const yearMonth = Temporal.Now.plainDateISO().toPlainYearMonth()
-
+	const today = Temporal.Now.plainDateISO().day;
 	const timeline = await prisma.diaries.findMany({
 		where: {
 			date: {
 				gte: new Date(yearMonth.toPlainDate({day: 1}).toString()),
-				lte: new Date(yearMonth.toPlainDate({day: yearMonth.daysInMonth}).toString()),
+				lte: new Date(yearMonth.toPlainDate({day: today - 1}).toString()),
 			}
 		},
 		select: {
@@ -53,3 +58,5 @@ export async function generateStaticParams() {
 			.toString()
 	}));
 }
+
+export const dynamic = 'force-dynamic'
