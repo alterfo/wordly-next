@@ -4,14 +4,9 @@ import Timeline from "@/components/timeline";
 import {Temporal} from "@js-temporal/polyfill";
 import EditableEntry from "@/components/editable-entry";
 import PlainYearMonth = Temporal.PlainYearMonth;
+import prisma from "@/prisma";
 
-export default async function DayView({
-	searchParams: { yyyymmdd }
-}: {
-	searchParams: { yyyymmdd: string};
-}) {
-	if (!yyyymmdd) yyyymmdd = Temporal.Now.plainDateISO().toString(); // build fallback
-
+export default async function DayView({params: {yyyymmdd}}: {params: { yyyymmdd: string }}) {
 	const yearMonth = PlainYearMonth.from(yyyymmdd)
 
 	const timeline = await getTimelineData(yearMonth)
@@ -33,4 +28,28 @@ export default async function DayView({
 		/> :
 				<pre className="whitespace-pre bg-zinc-300 rounded whitespace-pre-wrap p-10 m-10">{text}</pre>}
 			</>
+}
+
+export async function generateStaticParams() {
+	const yearMonth = Temporal.Now.plainDateISO().toPlainYearMonth()
+
+	const timeline = await prisma.diaries.findMany({
+		where: {
+			date: {
+				gte: new Date(yearMonth.toPlainDate({day: 1}).toString()),
+				lte: new Date(yearMonth.toPlainDate({day: yearMonth.daysInMonth}).toString()),
+			}
+		},
+		select: {
+			date: true,
+			word_count: true,
+		}
+	})
+
+	return timeline.map(({date}) => ({
+		yyyymmdd: Temporal.Instant.from(date.toISOString())
+			.toZonedDateTimeISO(Intl.DateTimeFormat().resolvedOptions().timeZone)
+			.toPlainDate()
+			.toString()
+	}));
 }

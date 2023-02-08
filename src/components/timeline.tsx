@@ -22,10 +22,14 @@ export default function Timeline({timeline, monthStringCapitalized, yyyymm}: Tim
 					   grid-rows-[50px]
 					   gap-2`
 			}>
-				{timeline.map(({day, word_count, is_today}: DayData) => (<Link href={`/${yyyymm}-${("0" + (day + 1)).slice(-2)}`} prefetch={false} replace key={day} >
+				{timeline.map(({day, word_count, is_today}: DayData) => (word_count ?
+					<Link href={`/${yyyymm}-${("0" + (day + 1)).slice(-2)}`} prefetch={false} replace key={day} >
 						<Day day={day} word_count={word_count} is_today={is_today}/>
-					</Link>)
-				)}
+					</Link>
+					:
+					<Day day={day} word_count={word_count} is_today={is_today} key={day}/>
+				))}
+
 			</div>
 		</>
 	)
