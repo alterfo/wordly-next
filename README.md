@@ -1,3 +1,6 @@
+![img.png](img.png)
+
+
 ## Getting Started
 
 First, install Docker Desktop and run DB with docker-compose (stack.yml), then, run the development server:
