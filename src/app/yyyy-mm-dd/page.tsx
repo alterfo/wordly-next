@@ -10,6 +10,8 @@ export default async function DayView({
 }: {
 	searchParams: { yyyymmdd: string};
 }) {
+	if (!yyyymmdd) yyyymmdd = Temporal.Now.plainDateISO().toString(); // build fallback
+
 	const yearMonth = PlainYearMonth.from(yyyymmdd)
 
 	const timeline = await getTimelineData(yearMonth)
