@@ -1,3 +1,4 @@
+import 'server-only'
 import {getMonthOfDay, getMonthStringCapitalized} from "@/date";
 import {getTextByDate, getTimelineData, isToday} from "@/api";
 import Timeline from "@/components/timeline";
@@ -11,8 +12,6 @@ export default async function DayView({params: {yyyymmdd}}: {params: { yyyymmdd:
 	const date = Temporal.PlainDate.from(yyyymmdd)
 
 	const is_today = isToday(date)
-
-	is_today && headers() // to prevent SSG
 
 	const yearMonth = PlainYearMonth.from(yyyymmdd)
 
