@@ -6,17 +6,6 @@ import { useSupabase } from './supabase-provider';
 export default function Login() {
 	const { supabase, session } = useSupabase();
 
-
-	const handleGitHubLogin = async () => {
-		const { error } = await supabase.auth.signInWithOAuth({
-			provider: 'github'
-		});
-
-		if (error) {
-			console.log({ error });
-		}
-	};
-
 	const handleLogout = async () => {
 		const { error } = await supabase.auth.signOut();
 
@@ -28,12 +17,5 @@ export default function Login() {
 	// this `session` is from the root loader - server-side
 	// therefore, it can safely be used to conditionally render
 	// SSR pages without issues with hydration
-	return session ? (
-		<button onClick={handleLogout} className="text-blue-50">Logout</button>
-	) : (
-		<>
-			{/*<button onClick={handleEmailLogin}>Email Login</button>*/}
-			<button className="text-blue-50" onClick={handleGitHubLogin}>GitHub Login</button>
-		</>
-	);
+	return (session && <button onClick={handleLogout} className="text-blue-50">Logout</button>)
 }
