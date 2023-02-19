@@ -1,5 +1,4 @@
 import {DayData, TimelineProps} from "@/types";
-import '../app/globals.css';
 import Day from "@/components/day";
 import Link from "next/link";
 

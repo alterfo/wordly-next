@@ -8,10 +8,10 @@ export default function Day({day, word_count, is_today}: DayData) {
 
 	// todo: fix timezone issue
 	// console.log(Intl.DateTimeFormat().resolvedOptions().timeZone);
-	const {wc} = useContext(DayContext)
-	useEffect( () => {
-		if (is_today) word_count = wc
-	})
+	// const {wc} = useContext(DayContext)
+	// useEffect( () => {
+	// 	if (is_today) word_count = wc
+	// })
 	return (
 			<div className="my-1.5 mx-0.5 cursor-pointer flex flex-col max-w-[100px]">
 				<span className="block text-xs text-blue-50 text-center">{day + 1}</span>

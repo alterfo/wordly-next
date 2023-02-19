@@ -5,7 +5,7 @@ const currentPlainDate = Temporal.Now.plainDateISO().toString();
 
 module.exports = {
     experimental: {
-        appDir: true
+        appDir: false // will be back to it when it passes beta
     },
     async redirects() {
         return [
