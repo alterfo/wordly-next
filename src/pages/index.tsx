@@ -8,10 +8,10 @@ export default function Index() {
 	const router = useRouter()
 
 	useEffect(() => {
-		if(session) {
+		if (session) {
 			router.push('/' + Temporal.Now.plainDateISO().toString())
 		} else {
 			router.push('/login')
 		}
-	}, [])
+	}, [session, router])
 }
