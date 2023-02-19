@@ -5,6 +5,8 @@ import {Temporal} from "@js-temporal/polyfill";
 import EditableEntry from "@/components/editable-entry";
 import PlainYearMonth = Temporal.PlainYearMonth;
 import {DayData} from "@/types";
+import {useSessionContext} from "@supabase/auth-helpers-react";
+import {useRouter} from "next/router";
 
 export default function DayView({
 	timeline,
@@ -20,8 +22,19 @@ export default function DayView({
 	text: string
 }) {
 	const yearMonth = PlainYearMonth.from(yyyymmdd)
+	const { session, supabaseClient } = useSessionContext()
+	const router = useRouter()
 
 	return <>
+		{session && <button
+        onClick={async () => {
+			await supabaseClient.auth.signOut();
+			router.push('/login');
+		}}
+        className="text-blue-50"
+    >
+        Logout
+    </button>}
 		<Timeline timeline={timeline} monthStringCapitalized={monthStringCapitalized} yyyymm={yearMonth}/>
 
 		{is_today ? <EditableEntry
@@ -39,9 +52,7 @@ export const getServerSideProps = async ({params} : {
 }) => {
 	const yyyymmdd = params.yyyymmdd
 
-	const date = Temporal.PlainDate.from(yyyymmdd)
-
-	const is_today = isToday(date)
+	const is_today = isToday(yyyymmdd)
 
 	const yearMonth = PlainYearMonth.from(yyyymmdd)
 
@@ -49,7 +60,7 @@ export const getServerSideProps = async ({params} : {
 
 	const monthStringCapitalized = getMonthStringCapitalized(yearMonth)
 
-	const text = await getTextByDate(date)
+	const text = await getTextByDate(yyyymmdd)
 
 	return {
 		props: {

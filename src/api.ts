@@ -6,8 +6,10 @@ export function inCurrentMonth(yearMonth: Temporal.PlainYearMonth) {
 	return yearMonth.equals(Temporal.Now.plainDateISO().toPlainYearMonth());
 }
 
-export function isToday(yyyymmdd: Temporal.PlainDate) {
-	return yyyymmdd.equals(Temporal.Now.plainDateISO().toString());
+export function isToday(yyyymmdd: string) {
+	console.log(yyyymmdd);
+	console.log(Temporal.Now.plainDateISO().toString());
+	return yyyymmdd === Temporal.Now.plainDateISO().toString()
 }
 
 function fillTimelineArray(	yearMonth: Temporal.PlainYearMonth,
@@ -63,10 +65,10 @@ export async function getTimelineData(yyyymm: Temporal.PlainYearMonth): Promise<
 	return fillTimelineArray(yyyymm, timelineData)
 }
 
-export async function getTextByDate(yyyymmdd: Temporal.PlainDate): Promise<string> {
+export async function getTextByDate(yyyymmdd: string): Promise<string> {
 	const text = await prisma.diaries.findUnique({
 		where: {
-			date: new Date(yyyymmdd.toString())
+			date: new Date(yyyymmdd)
 		},
 		select: {
 			text: true,

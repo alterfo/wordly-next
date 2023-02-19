@@ -19,15 +19,6 @@ const LoginPage: NextPage = () => {
 
 	const router = useRouter()
 
-	useEffect(() => {
-		async function loadData() {
-			const { data } = await supabaseClient.from('users').select('*').single();
-			setData(data);
-		}
-
-		if (user) loadData();
-	}, [user, supabaseClient]);
-
 	if (!session) {
 		return (
 			<>
